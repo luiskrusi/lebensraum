@@ -127,6 +127,8 @@ const naturdenkmaelerFlaeche = L.layerGroup();
 
 const naturdenkmaelerPunkt = L.layerGroup();
 
+const naturparkGrenze = L.layerGroup();
+
 
 
 
@@ -139,115 +141,115 @@ function loadGeoJSON(url, group, style = {}) {
 
     fetch(url)
 
-    .then(response => {
+        .then(response => {
 
 
-        if (!response.ok) {
+            if (!response.ok) {
 
-            throw new Error(
-                "GeoJSON konnte nicht geladen werden: " + url
-            );
-
-        }
-
-
-        return response.json();
-
-
-    })
-
-
-    .then(data => {
-
-
-        const layer = L.geoJSON(data, {
-
-
-            style: style,
-
-
-            pointToLayer:function(feature, latlng){
-
-
-                return L.circleMarker(
-
-                    latlng,
-
-                    {
-
-                        radius:6,
-
-                        color:style.color || "brown",
-
-                        fillColor:style.fillColor || "brown",
-
-                        fillOpacity:0.8
-
-                    }
-
+                throw new Error(
+                    "GeoJSON konnte nicht geladen werden: " + url
                 );
 
-
-            },
-
-
-            onEachFeature:function(feature, layer){
+            }
 
 
-                if(feature.properties){
+            return response.json();
 
 
-                    layer.bindPopup(
+        })
 
 
-                        Object.entries(feature.properties)
+        .then(data => {
 
 
-                        .filter(([k,v]) =>
-
-                            v !== null &&
-                            v !== ""
-
-                        )
+            const layer = L.geoJSON(data, {
 
 
-                        .map(([k,v]) =>
-
-                            `<b>${k}</b>: ${v}`
-
-                        )
+                style: style,
 
 
-                        .join("<br>")
+                pointToLayer: function (feature, latlng) {
 
+
+                    return L.circleMarker(
+
+                        latlng,
+
+                        {
+
+                            radius: 6,
+
+                            color: style.color || "brown",
+
+                            fillColor: style.fillColor || "brown",
+
+                            fillOpacity: 0.8
+
+                        }
 
                     );
+
+
+                },
+
+
+                onEachFeature: function (feature, layer) {
+
+
+                    if (feature.properties) {
+
+
+                        layer.bindPopup(
+
+
+                            Object.entries(feature.properties)
+
+
+                                .filter(([k, v]) =>
+
+                                    v !== null &&
+                                    v !== ""
+
+                                )
+
+
+                                .map(([k, v]) =>
+
+                                    `<b>${k}</b>: ${v}`
+
+                                )
+
+
+                                .join("<br>")
+
+
+                        );
+
+
+                    }
 
 
                 }
 
 
-            }
+            });
+
+
+
+            layer.addTo(group);
+
+
+
+        })
+
+
+        .catch(error => {
+
+
+            console.error(error);
 
 
         });
-
-
-
-        layer.addTo(group);
-
-
-
-    })
-
-
-    .catch(error => {
-
-
-        console.error(error);
-
-
-    });
 
 
 }
@@ -291,114 +293,114 @@ function loadWFS(url, typeName, group, style = {}) {
     fetch(wfsUrl)
 
 
-    .then(response => {
+        .then(response => {
 
 
-        if(!response.ok){
+            if (!response.ok) {
 
-            throw new Error(
-                "WFS Fehler: " + response.status
-            );
-
-        }
-
-
-        return response.json();
-
-
-    })
-
-
-    .then(data => {
-
-
-        const layer = L.geoJSON(data, {
-
-
-            style:style,
-
-
-            pointToLayer:function(feature,latlng){
-
-
-                return L.circleMarker(
-
-                    latlng,
-
-                    {
-
-                        radius:7,
-
-                        color:style.color,
-
-                        fillColor:style.fillColor,
-
-                        fillOpacity:0.8
-
-                    }
-
+                throw new Error(
+                    "WFS Fehler: " + response.status
                 );
 
-
-            },
-
-
-            onEachFeature:function(feature,layer){
+            }
 
 
-                if(feature.properties){
+            return response.json();
 
 
-                    layer.bindPopup(
+        })
 
 
-                        Object.entries(feature.properties)
+        .then(data => {
 
 
-                        .map(([k,v]) =>
-
-                            `<b>${k}</b>: ${v}`
-
-                        )
+            const layer = L.geoJSON(data, {
 
 
-                        .join("<br>")
+                style: style,
 
+
+                pointToLayer: function (feature, latlng) {
+
+
+                    return L.circleMarker(
+
+                        latlng,
+
+                        {
+
+                            radius: 7,
+
+                            color: style.color,
+
+                            fillColor: style.fillColor,
+
+                            fillOpacity: 0.8
+
+                        }
 
                     );
+
+
+                },
+
+
+                onEachFeature: function (feature, layer) {
+
+
+                    if (feature.properties) {
+
+
+                        layer.bindPopup(
+
+
+                            Object.entries(feature.properties)
+
+
+                                .map(([k, v]) =>
+
+                                    `<b>${k}</b>: ${v}`
+
+                                )
+
+
+                                .join("<br>")
+
+
+                        );
+
+
+                    }
 
 
                 }
 
 
-            }
 
+            });
+
+
+
+            layer.addTo(group);
+
+
+
+        })
+
+
+        .catch(error => {
+
+
+            console.error(
+
+                "WFS konnte nicht geladen werden:",
+
+                error
+
+            );
 
 
         });
-
-
-
-        layer.addTo(group);
-
-
-
-    })
-
-
-    .catch(error => {
-
-
-        console.error(
-
-            "WFS konnte nicht geladen werden:",
-
-            error
-
-        );
-
-
-    });
 
 
 }
@@ -419,18 +421,41 @@ loadGeoJSON(
 
     {
 
-        color:"brown",
+        color: "brown",
 
-        weight:2,
+        weight: 2,
 
-        fillColor:"orange",
+        fillColor: "orange",
 
-        fillOpacity:0.5
+        fillOpacity: 0.5
 
     }
 
 );
 
+// ===============================
+// Naturpark Karwendel Grenze laden
+// ===============================
+
+loadGeoJSON(
+
+    "data/NP_Grenze1.geojson",
+
+    naturparkGrenze,
+
+    {
+
+        color: "black",
+
+        weight: 1,
+
+        fillColor: "transparent",
+
+        fillOpacity: 0
+
+    }
+
+);
 
 
 
@@ -451,9 +476,9 @@ loadWFS(
 
     {
 
-        color:"darkgreen",
+        color: "darkgreen",
 
-        fillColor:"yellow"
+        fillColor: "yellow"
 
     }
 
@@ -471,13 +496,13 @@ loadWFS(
 
     {
 
-        color:"green",
+        color: "green",
 
-        fillColor:"lightgreen",
+        fillColor: "lightgreen",
 
-        weight:2,
+        weight: 2,
 
-        fillOpacity:0.4
+        fillOpacity: 0.4
 
     }
 
@@ -507,7 +532,12 @@ const overlayMaps = {
 
     "📍 Naturdenkmäler Punkt":
 
-        naturdenkmaelerPunkt
+        naturdenkmaelerPunkt,
+
+
+    "🏔️ Naturpark Karwendel":
+
+        naturparkGrenze
 
 
 };
@@ -518,7 +548,7 @@ L.control.layers(
 
     {
 
-        "OpenStreetMap":osm
+        "OpenStreetMap": osm
 
     },
 
@@ -528,7 +558,7 @@ L.control.layers(
 
     {
 
-        collapsed:false
+        collapsed: false
 
     }
 
@@ -546,9 +576,9 @@ L.control.layers(
 
 L.control.scale({
 
-    metric:true,
+    metric: true,
 
-    imperial:false
+    imperial: false
 
 }).addTo(map);
 
@@ -566,3 +596,5 @@ totholz.addTo(map);
 naturdenkmaelerFlaeche.addTo(map);
 
 naturdenkmaelerPunkt.addTo(map);
+
+naturparkGrenze.addTo(map);

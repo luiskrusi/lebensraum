@@ -1,21 +1,151 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-body {
-    font-family: Arial, sans-serif;
+html,
+body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:"Segoe UI",sans-serif;
+    background:#f4f4f4;
 }
 
-h2 {
-    text-align: center;
-    padding: 10px;
-    background: #2c3e50;
-    color: white;
+#app{
+    display:flex;
+    flex-direction:column;
+    height:100vh;
 }
 
-#map {
-    width: 100%;
-    height: calc(100vh - 55px);
+/* ---------- HEADER ---------- */
+
+header{
+
+    height:70px;
+
+    background:#1f3b2d;
+
+    color:white;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:0 25px;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.2);
+
+    z-index:1000;
+}
+
+.title{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+}
+
+.title i{
+
+    font-size:34px;
+
+    color:#90d26d;
+}
+
+.title h1{
+
+    font-size:24px;
+
+    font-weight:600;
+}
+
+.title p{
+
+    font-size:13px;
+
+    color:#d9e5d4;
+}
+
+.info{
+
+    display:flex;
+
+    gap:30px;
+
+    font-size:14px;
+}
+
+.info span{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+}
+
+/* ---------- MAP ---------- */
+
+main{
+
+    flex:1;
+}
+
+#map{
+
+    width:100%;
+
+    height:100%;
+}
+
+/* ---------- FOOTER ---------- */
+
+footer{
+
+    height:35px;
+
+    background:#2f2f2f;
+
+    color:#ddd;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:13px;
+}
+
+/* ---------- Leaflet ---------- */
+
+.leaflet-container{
+
+    background:#d9e6cf;
+}
+
+.leaflet-control-layers{
+
+    border:none;
+
+    border-radius:10px;
+
+    box-shadow:0 3px 12px rgba(0,0,0,.25);
+}
+
+.leaflet-popup-content-wrapper{
+
+    border-radius:10px;
+}
+
+.leaflet-bar{
+
+    border-radius:8px;
+    overflow:hidden;
 }

@@ -1,84 +1,169 @@
-// Karte erstellen
-const map = L.map('map').setView([47.2682, 11.3923], 12); // Innsbruck
+// ===============================
+// Karte initialisieren
+// ===============================
 
-// Hintergrundkarte
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap-Mitwirkende'
-}).addTo(map);
+const map = L.map('map').setView([47.4, 11.7], 10);
 
-// Marker hinzufügen
-const marker = L.marker([47.2682, 11.3923]).addTo(map);
 
-marker.bindPopup("<b>Innsbruck</b><br>Mein erster Marker.");
+// ===============================
+// Basemap OSM
+// ===============================
 
-// Kreis
-L.circle([47.275, 11.42], {
-    radius: 400,
-    color: 'red',
-    fillColor: '#f03',
-    fillOpacity: 0.4
-}).addTo(map);
+const osm = L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+        attribution: '&copy; OpenStreetMap contributors'
+    }
+).addTo(map);
 
-// Polygon
-const polygon = L.polygon([
-    [47.27, 11.36],
-    [47.29, 11.39],
-    [47.26, 11.43]
-], {
-    color: 'blue',
-    fillOpacity: 0.3
-}).addTo(map);
 
-polygon.bindPopup("Beispielpolygon");
+// ===============================
+// Layer Gruppen
+// ===============================
 
-// Punkte aus GeoJSON laden
-fetch("data/punkte.geojson")
-.then(response => response.json())
-.then(data => {
+const totholz = L.layerGroup();
 
-    L.geoJSON(data, {
 
-        pointToLayer: function(feature, latlng) {
-            return L.circleMarker(latlng, {
-                radius: 6,
-                fillColor: "orange",
-                color: "#333",
-                weight: 1,
-                fillOpacity: 0.9
-            });
-        },
+// ===============================
+// GeoJSON Loader
+// ===============================
 
-        onEachFeature: function(feature, layer) {
-            if(feature.properties){
-                layer.bindPopup(
-                    "<b>" + feature.properties.name + "</b>"
+function loadGeoJSON(url, group, style = {}) {
+
+    fetch(url)
+        .then(response => {
+
+            if (!response.ok) {
+                throw new Error(
+                    "GeoJSON konnte nicht geladen werden: " + url
                 );
             }
-        }
 
-    }).addTo(map);
+            return response.json();
 
-});
+        })
+        .then(data => {
 
-// Polygonlayer laden
-fetch("data/polygon.geojson")
-.then(response => response.json())
-.then(data => {
+            const layer = L.geoJSON(data, {
 
-    L.geoJSON(data, {
+                style: style,
 
-        style: {
-            color: "green",
-            weight: 2,
-            fillOpacity: 0.4
-        },
+                pointToLayer: function(feature, latlng) {
 
-        onEachFeature: function(feature, layer){
-            if(feature.properties){
-                layer.bindPopup(feature.properties.name);
-            }
-        }
+                    return L.circleMarker(latlng, {
 
-    }).addTo(map);
+                        radius: 6,
+                        fillOpacity: 0.8,
+                        color: style.color || "brown",
+                        fillColor: style.fillColor || "brown"
 
-});
+                    });
+
+                },
+
+
+                onEachFeature: function(feature, layer) {
+
+                    if (feature.properties) {
+
+                        layer.bindPopup(
+
+                            Object.entries(feature.properties)
+
+                            .filter(([k,v]) =>
+                                v !== null &&
+                                v !== ""
+                            )
+
+                            .map(([k,v]) =>
+                                `<b>${k}</b>: ${v}`
+                            )
+
+                            .join("<br>")
+
+                        );
+
+                    }
+
+                }
+
+            });
+
+
+            layer.addTo(group);
+
+
+        })
+
+        .catch(error => {
+
+            console.error(error);
+
+        });
+
+}
+
+
+
+// ===============================
+// Totholz laden
+// ===============================
+
+loadGeoJSON(
+    "data/2025_Totholz_abgeloest.geojson",
+    totholz,
+    {
+        color: "brown",
+        weight: 2,
+        fillColor: "orange",
+        fillOpacity: 0.5
+    }
+);
+
+
+
+// ===============================
+// Layer Control
+// ===============================
+
+const overlayMaps = {
+
+    "🌲 2025 Totholz abgelöst": totholz
+
+};
+
+
+L.control.layers(
+
+    {
+        "OpenStreetMap": osm
+    },
+
+    overlayMaps,
+
+    {
+        collapsed:false
+    }
+
+).addTo(map);
+
+
+
+// ===============================
+// Maßstab
+// ===============================
+
+L.control.scale({
+
+    metric:true,
+    imperial:false
+
+}).addTo(map);
+
+
+
+// ===============================
+// Layer automatisch anzeigen
+// ===============================
+
+totholz.addTo(map);

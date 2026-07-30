@@ -1,28 +1,61 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaflet Webmap</title>
 
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet"
-          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <title>Totholzmonitoring Tirol</title>
 
-    <!-- Eigenes CSS -->
-    <link rel="stylesheet" href="css/main.css">
-</head>
-<body>
-
-    <h2>Meine Leaflet-Webkarte</h2>
-
-    <div id="map"></div>
-
-    <!-- Leaflet JS -->
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <!-- Eigenes JS -->
-    <script src="js/main.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+    <!-- Eigene Dateien -->
+    <link rel="stylesheet" href="main.css">
+    <script defer src="main.js"></script>
+
+</head>
+
+<body>
+
+<div id="app">
+
+    <header>
+
+        <div class="title">
+            <i class="fa-solid fa-tree"></i>
+            <div>
+                <h1>Totholzmonitoring Tirol</h1>
+                <p>Interaktive Webkarte</p>
+            </div>
+        </div>
+
+        <div class="info">
+            <span><i class="fa-solid fa-layer-group"></i> GeoJSON-Layer</span>
+            <span><i class="fa-solid fa-location-dot"></i> Leaflet WebGIS</span>
+        </div>
+
+    </header>
+
+    <main>
+
+        <div id="map"></div>
+
+    </main>
+
+    <footer>
+
+        © 2026
+        Daten: Tiroler Landesregierung, OpenStreetMap, Naturpark Karwendel
+
+    </footer>
+
+</div>
 
 </body>
 </html>

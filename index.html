@@ -2,45 +2,121 @@
 <html lang="de">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Maßnahmen/Unterschutzstellungen im Naturpark Karwendel </title>
+    <title>
+        Maßnahmen/Unterschutzstellungen im Naturpark Karwendel
+    </title>
 
-    <!-- Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <!-- Font Awesome -->
+    <!-- ===============================
+         Leaflet CSS
+    ================================ -->
+
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
-    <!-- Eigene Dateien -->
-    <link rel="stylesheet" href="main.css">
-    <script defer src="main.js"></script>
+
+    <!-- ===============================
+         Leaflet Locate Control
+    ================================ -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css">
+
+
+    <!-- ===============================
+         Leaflet MiniMap
+    ================================ -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/leaflet-minimap/dist/Control.MiniMap.min.css">
+
+
+    <!-- ===============================
+         Leaflet Measure
+    ================================ -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/leaflet-measure/dist/leaflet-measure.css">
+
+
+    <!-- ===============================
+         Font Awesome
+    ================================ -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+
+    <!-- ===============================
+         Eigene CSS
+    ================================ -->
+
+    <link rel="stylesheet"
+          href="main.css">
+
 
 </head>
 
+
 <body>
+
 
 <div id="app">
 
+
     <header>
 
+
         <div class="title">
+
             <i class="fa-solid fa-tree"></i>
+
             <div>
-                <h1>Maßnahmen/Unterschutzstellungen im Naturpark Karwendel</h1>
-                <p>Entwurf einer Interaktive Webkarte</p>
+
+                <h1>
+                    Maßnahmen/Unterschutzstellungen
+                    im Naturpark Karwendel
+                </h1>
+
+                <p>
+                    Entwurf einer interaktiven Webkarte
+                </p>
+
             </div>
+
         </div>
+
 
         <div class="info">
-            <span><i class="fa-solid fa-layer-group"></i> GeoJSON-Layer</span>
-            <span><i class="fa-solid fa-location-dot"></i> Leaflet WebGIS</span>
+
+            <span>
+                <i class="fa-solid fa-layer-group"></i>
+                GeoJSON-Layer
+            </span>
+
+
+            <span>
+                <i class="fa-solid fa-location-dot"></i>
+                Leaflet WebGIS
+            </span>
+
+
+            <span>
+                <i class="fa-solid fa-ruler"></i>
+                Messen
+            </span>
+
+
         </div>
 
+
     </header>
+
+
 
     <main>
 
@@ -48,14 +124,62 @@
 
     </main>
 
+
+
     <footer>
 
-        © 2026
-        Daten: Tiroler Landesregierung, OpenStreetMap, Naturpark Karwendel
+        © 2026  
+        Daten: Tiroler Landesregierung,
+        OpenStreetMap,
+        Naturpark Karwendel
 
     </footer>
 
+
 </div>
 
+
+
+<!-- ===============================
+     Leaflet JS
+================================ -->
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+
+
+<!-- ===============================
+     Locate Plugin
+================================ -->
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
+
+
+
+<!-- ===============================
+     MiniMap Plugin
+================================ -->
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet-minimap/dist/Control.MiniMap.min.js"></script>
+
+
+
+<!-- ===============================
+     Measure Plugin
+================================ -->
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet-measure/dist/leaflet-measure.js"></script>
+
+
+
+<!-- ===============================
+     Eigener Code
+================================ -->
+
+<script src="main.js"></script>
+
+
+
 </body>
+
 </html>

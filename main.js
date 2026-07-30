@@ -1,8 +1,11 @@
+//
 // ===============================
 // Karte initialisieren
 // ===============================
+//
 
 const map = L.map('map').setView([47.4, 11.7], 10);
+
 
 
 // ===============================
@@ -17,6 +20,103 @@ const osm = L.tileLayer(
 ).addTo(map);
 
 
+
+// ===============================
+// Locate Me Plugin
+// ===============================
+
+L.control.locate({
+
+    position: "topleft",
+
+    strings: {
+        title: "Meine Position anzeigen"
+    },
+
+    locateOptions: {
+
+        enableHighAccuracy: true
+
+    },
+
+    drawCircle: true,
+
+    drawMarker: true,
+
+    showPopup: true,
+
+    keepCurrentZoomLevel: false
+
+
+}).addTo(map);
+
+
+
+
+// ===============================
+// MiniMap Plugin
+// ===============================
+
+const miniOSM = L.tileLayer(
+
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+
+    {
+
+        attribution: '&copy; OpenStreetMap'
+
+    }
+
+);
+
+
+new L.Control.MiniMap(
+
+    miniOSM,
+
+    {
+
+        position: "bottomright",
+
+        width: 200,
+
+        height: 150,
+
+        zoomLevelOffset: -5,
+
+        toggleDisplay: true,
+
+        minimized: false
+
+    }
+
+).addTo(map);
+
+
+
+
+// ===============================
+// Measure Plugin
+// ===============================
+
+new L.Control.Measure({
+
+    position: "topleft",
+
+    primaryLengthUnit: "kilometers",
+
+    secondaryLengthUnit: "meters",
+
+    primaryAreaUnit: "hectares",
+
+    secondaryAreaUnit: "sqmeters"
+
+}).addTo(map);
+
+
+
+
+
 // ===============================
 // Layer Gruppen
 // ===============================
@@ -28,175 +128,283 @@ const naturdenkmaelerFlaeche = L.layerGroup();
 const naturdenkmaelerPunkt = L.layerGroup();
 
 
+
+
 // ===============================
 // GeoJSON Loader
 // ===============================
 
 function loadGeoJSON(url, group, style = {}) {
 
+
     fetch(url)
-        .then(response => {
 
-            if (!response.ok) {
-                throw new Error(
-                    "GeoJSON konnte nicht geladen werden: " + url
-                );
-            }
-
-            return response.json();
-
-        })
-        .then(data => {
-
-            const layer = L.geoJSON(data, {
-
-                style: style,
+    .then(response => {
 
 
-                pointToLayer: function(feature, latlng) {
+        if (!response.ok) {
 
-                    return L.circleMarker(latlng, {
+            throw new Error(
+                "GeoJSON konnte nicht geladen werden: " + url
+            );
 
-                        radius: 6,
-                        fillOpacity: 0.8,
-                        color: style.color || "brown",
-                        fillColor: style.fillColor || "brown"
-
-                    });
-
-                },
+        }
 
 
-                onEachFeature: function(feature, layer) {
+        return response.json();
 
-                    if (feature.properties) {
 
-                        layer.bindPopup(
+    })
 
-                            Object.entries(feature.properties)
 
-                            .filter(([k,v]) =>
-                                v !== null &&
-                                v !== ""
-                            )
+    .then(data => {
 
-                            .map(([k,v]) =>
-                                `<b>${k}</b>: ${v}`
-                            )
 
-                            .join("<br>")
+        const layer = L.geoJSON(data, {
 
-                        );
+
+            style: style,
+
+
+            pointToLayer:function(feature, latlng){
+
+
+                return L.circleMarker(
+
+                    latlng,
+
+                    {
+
+                        radius:6,
+
+                        color:style.color || "brown",
+
+                        fillColor:style.fillColor || "brown",
+
+                        fillOpacity:0.8
 
                     }
 
+                );
+
+
+            },
+
+
+            onEachFeature:function(feature, layer){
+
+
+                if(feature.properties){
+
+
+                    layer.bindPopup(
+
+
+                        Object.entries(feature.properties)
+
+
+                        .filter(([k,v]) =>
+
+                            v !== null &&
+                            v !== ""
+
+                        )
+
+
+                        .map(([k,v]) =>
+
+                            `<b>${k}</b>: ${v}`
+
+                        )
+
+
+                        .join("<br>")
+
+
+                    );
+
+
                 }
 
-            });
 
+            }
 
-            layer.addTo(group);
-
-
-        })
-
-        .catch(error => {
-
-            console.error(error);
 
         });
 
+
+
+        layer.addTo(group);
+
+
+
+    })
+
+
+    .catch(error => {
+
+
+        console.error(error);
+
+
+    });
+
+
 }
 
+
+
+
+
+
+// ===============================
+// WFS Loader
+// ===============================
 
 function loadWFS(url, typeName, group, style = {}) {
 
+
     const wfsUrl =
+
         url +
+
         "?service=WFS" +
+
         "&version=2.0.0" +
+
         "&request=GetFeature" +
-        "&typeNames=" + encodeURIComponent(typeName) +
+
+        "&typeNames=" +
+        encodeURIComponent(typeName) +
+
         "&outputFormat=GEOJSON";
 
 
-    console.log("WFS Anfrage:", wfsUrl);
+
+    console.log(
+        "WFS Anfrage:",
+        wfsUrl
+    );
+
 
 
     fetch(wfsUrl)
-        .then(response => {
-
-            if (!response.ok) {
-                throw new Error(
-                    "WFS Fehler: " + response.status
-                );
-            }
-
-            return response.json();
-
-        })
-        .then(data => {
 
 
-            console.log("WFS Daten:", data);
+    .then(response => {
 
 
-            const layer = L.geoJSON(data, {
+        if(!response.ok){
 
-                style: style,
+            throw new Error(
+                "WFS Fehler: " + response.status
+            );
 
-
-                pointToLayer: function(feature, latlng) {
-
-                    return L.circleMarker(latlng, {
-
-                        radius: 7,
-                        color: style.color,
-                        fillColor: style.fillColor,
-                        fillOpacity: 0.8
-
-                    });
-
-                },
+        }
 
 
-                onEachFeature:function(feature, layer){
+        return response.json();
 
-                    if(feature.properties){
 
-                        layer.bindPopup(
+    })
 
-                            Object.entries(feature.properties)
 
-                            .map(([k,v]) =>
-                                `<b>${k}</b>: ${v}`
-                            )
+    .then(data => {
 
-                            .join("<br>")
 
-                        );
+        const layer = L.geoJSON(data, {
+
+
+            style:style,
+
+
+            pointToLayer:function(feature,latlng){
+
+
+                return L.circleMarker(
+
+                    latlng,
+
+                    {
+
+                        radius:7,
+
+                        color:style.color,
+
+                        fillColor:style.fillColor,
+
+                        fillOpacity:0.8
 
                     }
 
+                );
+
+
+            },
+
+
+            onEachFeature:function(feature,layer){
+
+
+                if(feature.properties){
+
+
+                    layer.bindPopup(
+
+
+                        Object.entries(feature.properties)
+
+
+                        .map(([k,v]) =>
+
+                            `<b>${k}</b>: ${v}`
+
+                        )
+
+
+                        .join("<br>")
+
+
+                    );
+
+
                 }
 
-            });
+
+            }
 
 
-            layer.addTo(group);
-
-
-        })
-        .catch(error => {
-
-            console.error(
-                "WFS konnte nicht geladen werden:",
-                error
-            );
 
         });
 
+
+
+        layer.addTo(group);
+
+
+
+    })
+
+
+    .catch(error => {
+
+
+        console.error(
+
+            "WFS konnte nicht geladen werden:",
+
+            error
+
+        );
+
+
+    });
+
+
 }
+
+
+
 
 
 // ===============================
@@ -204,15 +412,27 @@ function loadWFS(url, typeName, group, style = {}) {
 // ===============================
 
 loadGeoJSON(
+
     "data/2025_Totholz_abgeloest.geojson",
+
     totholz,
+
     {
-        color: "brown",
-        weight: 2,
-        fillColor: "orange",
-        fillOpacity: 0.5
+
+        color:"brown",
+
+        weight:2,
+
+        fillColor:"orange",
+
+        fillOpacity:0.5
+
     }
+
 );
+
+
+
 
 
 
@@ -221,29 +441,51 @@ loadGeoJSON(
 // ===============================
 
 
-// Fläche
 loadWFS(
+
     "https://dservices3.arcgis.com/hG7UfxX49PQ8XkXh/arcgis/services/Naturdenkmaeler_Punkt/WFSServer",
+
     "Naturdenkmaeler_Punkt:Naturdenkmaeler_Punkt",
+
     naturdenkmaelerPunkt,
+
     {
-        color: "darkgreen",
-        fillColor: "yellow"
+
+        color:"darkgreen",
+
+        fillColor:"yellow"
+
     }
+
 );
+
 
 
 loadWFS(
+
     "https://dservices3.arcgis.com/hG7UfxX49PQ8XkXh/arcgis/services/Naturdenkmaeler_Flaeche/WFSServer",
+
     "Naturdenkmaeler_Flaeche:Naturdenkmaeler_Flaeche",
+
     naturdenkmaelerFlaeche,
+
     {
-        color: "green",
-        fillColor: "lightgreen",
-        weight: 2,
-        fillOpacity: 0.4
+
+        color:"green",
+
+        fillColor:"lightgreen",
+
+        weight:2,
+
+        fillOpacity:0.4
+
     }
+
 );
+
+
+
+
 
 
 // ===============================
@@ -252,28 +494,49 @@ loadWFS(
 
 const overlayMaps = {
 
-    "🌲 2025 Totholz abgelöst": totholz,
 
-    "🌳 Naturdenkmäler Fläche": naturdenkmaelerFlaeche,
+    "🌲 2025 Totholz abgelöst":
 
-    "📍 Naturdenkmäler Punkt": naturdenkmaelerPunkt
+        totholz,
+
+
+    "🌳 Naturdenkmäler Fläche":
+
+        naturdenkmaelerFlaeche,
+
+
+    "📍 Naturdenkmäler Punkt":
+
+        naturdenkmaelerPunkt
+
 
 };
+
 
 
 L.control.layers(
 
     {
-        "OpenStreetMap": osm
+
+        "OpenStreetMap":osm
+
     },
+
 
     overlayMaps,
 
+
     {
+
         collapsed:false
+
     }
 
+
 ).addTo(map);
+
+
+
 
 
 
@@ -284,9 +547,13 @@ L.control.layers(
 L.control.scale({
 
     metric:true,
+
     imperial:false
 
 }).addTo(map);
+
+
+
 
 
 

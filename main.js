@@ -23,6 +23,10 @@ const osm = L.tileLayer(
 
 const totholz = L.layerGroup();
 
+const naturdenkmaelerFlaeche = L.layerGroup();
+
+const naturdenkmaelerPunkt = L.layerGroup();
+
 
 // ===============================
 // GeoJSON Loader
@@ -47,6 +51,7 @@ function loadGeoJSON(url, group, style = {}) {
             const layer = L.geoJSON(data, {
 
                 style: style,
+
 
                 pointToLayer: function(feature, latlng) {
 
@@ -104,6 +109,95 @@ function loadGeoJSON(url, group, style = {}) {
 }
 
 
+function loadWFS(url, typeName, group, style = {}) {
+
+    const wfsUrl =
+        url +
+        "?service=WFS" +
+        "&version=2.0.0" +
+        "&request=GetFeature" +
+        "&typeNames=" + encodeURIComponent(typeName) +
+        "&outputFormat=GEOJSON";
+
+
+    console.log("WFS Anfrage:", wfsUrl);
+
+
+    fetch(wfsUrl)
+        .then(response => {
+
+            if (!response.ok) {
+                throw new Error(
+                    "WFS Fehler: " + response.status
+                );
+            }
+
+            return response.json();
+
+        })
+        .then(data => {
+
+
+            console.log("WFS Daten:", data);
+
+
+            const layer = L.geoJSON(data, {
+
+                style: style,
+
+
+                pointToLayer: function(feature, latlng) {
+
+                    return L.circleMarker(latlng, {
+
+                        radius: 7,
+                        color: style.color,
+                        fillColor: style.fillColor,
+                        fillOpacity: 0.8
+
+                    });
+
+                },
+
+
+                onEachFeature:function(feature, layer){
+
+                    if(feature.properties){
+
+                        layer.bindPopup(
+
+                            Object.entries(feature.properties)
+
+                            .map(([k,v]) =>
+                                `<b>${k}</b>: ${v}`
+                            )
+
+                            .join("<br>")
+
+                        );
+
+                    }
+
+                }
+
+            });
+
+
+            layer.addTo(group);
+
+
+        })
+        .catch(error => {
+
+            console.error(
+                "WFS konnte nicht geladen werden:",
+                error
+            );
+
+        });
+
+}
+
 
 // ===============================
 // Totholz laden
@@ -123,12 +217,46 @@ loadGeoJSON(
 
 
 // ===============================
+// Naturdenkmäler WFS laden
+// ===============================
+
+
+// Fläche
+loadWFS(
+    "https://dservices3.arcgis.com/hG7UfxX49PQ8XkXh/arcgis/services/Naturdenkmaeler_Punkt/WFSServer",
+    "Naturdenkmaeler_Punkt:Naturdenkmaeler_Punkt",
+    naturdenkmaelerPunkt,
+    {
+        color: "darkgreen",
+        fillColor: "yellow"
+    }
+);
+
+
+loadWFS(
+    "https://dservices3.arcgis.com/hG7UfxX49PQ8XkXh/arcgis/services/Naturdenkmaeler_Flaeche/WFSServer",
+    "Naturdenkmaeler_Flaeche:Naturdenkmaeler_Flaeche",
+    naturdenkmaelerFlaeche,
+    {
+        color: "green",
+        fillColor: "lightgreen",
+        weight: 2,
+        fillOpacity: 0.4
+    }
+);
+
+
+// ===============================
 // Layer Control
 // ===============================
 
 const overlayMaps = {
 
-    "🌲 2025 Totholz abgelöst": totholz
+    "🌲 2025 Totholz abgelöst": totholz,
+
+    "🌳 Naturdenkmäler Fläche": naturdenkmaelerFlaeche,
+
+    "📍 Naturdenkmäler Punkt": naturdenkmaelerPunkt
 
 };
 
@@ -167,3 +295,7 @@ L.control.scale({
 // ===============================
 
 totholz.addTo(map);
+
+naturdenkmaelerFlaeche.addTo(map);
+
+naturdenkmaelerPunkt.addTo(map);

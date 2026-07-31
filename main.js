@@ -146,19 +146,22 @@ const totholz = L.markerClusterGroup({
     disableClusteringAtZoom: 15,
 
 
-    iconCreateFunction: function (cluster) {
+    iconCreateFunction: function(cluster) {
 
         return L.divIcon({
 
             html:
-                '<div class="cluster-totholz">' +
-                cluster.getChildCount() +
-                '</div>',
+            `
+            <div class="totholz-cluster">
+                <img src="icons/totholz.svg">
+                <span>${cluster.getChildCount()}</span>
+            </div>
+            `,
 
 
-            className: 'custom-cluster',
+            className: "custom-cluster-icon",
 
-            iconSize: L.point(40, 40)
+            iconSize: [30,30]
 
         });
 

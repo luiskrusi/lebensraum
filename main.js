@@ -35,6 +35,23 @@ const totholzIcon = L.icon({
 
 });
 
+
+// ===============================
+// Naturdenkmal Einzelmarker Icon
+// ===============================
+
+const naturdenkmalIcon = L.icon({
+
+    iconUrl: "icons/denkmaeler.svg",
+
+    iconSize: [35, 35],
+
+    iconAnchor: [17, 35],
+
+    popupAnchor: [0, -35]
+
+});
+
 // ===============================
 // Locate Me Plugin
 // ===============================
@@ -146,12 +163,12 @@ const totholz = L.markerClusterGroup({
     disableClusteringAtZoom: 15,
 
 
-    iconCreateFunction: function(cluster) {
+    iconCreateFunction: function (cluster) {
 
         return L.divIcon({
 
             html:
-            `
+                `
             <div class="totholz-cluster">
                 <img src="icons/totholz.svg">
                 <span>${cluster.getChildCount()}</span>
@@ -161,7 +178,7 @@ const totholz = L.markerClusterGroup({
 
             className: "custom-cluster-icon",
 
-            iconSize: [30,30]
+            iconSize: [30, 30]
 
         });
 
@@ -182,19 +199,30 @@ const naturdenkmaelerPunkt = L.markerClusterGroup({
 
     iconCreateFunction: function (cluster) {
 
+
         return L.divIcon({
 
             html:
-                '<div class="cluster-naturdenkmal">' +
-                cluster.getChildCount() +
-                '</div>',
+
+                `
+            <div class="naturdenkmal-cluster">
+
+                <img src="icons/denkmaeler.svg">
+
+                <span>
+                ${cluster.getChildCount()}
+                </span>
+
+            </div>
+            `,
 
 
-            className: 'custom-cluster',
+            className: "custom-cluster-icon",
 
-            iconSize: L.point(40, 40)
+            iconSize: [50, 50]
 
         });
+
 
     }
 
@@ -353,7 +381,7 @@ function loadGeoJSON(url, group, style = {}, markerIcon = null) {
 // WFS Loader
 // ===============================
 
-function loadWFS(url, typeName, group, style = {}) {
+function loadWFS(url, typeName, group, style = {}, markerIcon = null) {
 
 
     const wfsUrl =
@@ -422,6 +450,21 @@ function loadWFS(url, typeName, group, style = {}) {
 
 
                 pointToLayer: function (feature, latlng) {
+
+
+                    if (markerIcon) {
+
+                        return L.marker(
+
+                            latlng,
+
+                            {
+                                icon: markerIcon
+                            }
+
+                        );
+
+                    }
 
 
                     return L.circleMarker(
@@ -521,10 +564,10 @@ loadGeoJSON(
     totholz,
 
     {
-        color:"brown",
-        weight:2,
-        fillColor:"orange",
-        fillOpacity:0.5
+        color: "brown",
+        weight: 2,
+        fillColor: "orange",
+        fillOpacity: 0.5
     },
 
     totholzIcon
@@ -577,7 +620,9 @@ loadWFS(
 
         fillColor: "yellow"
 
-    }
+    },
+
+    naturdenkmalIcon
 
 );
 
@@ -617,22 +662,19 @@ loadWFS(
 const overlayMaps = {
 
 
-    "🌲 Totholz abgelöst":
-
+    '<img src="icons/totholz.svg" class="layer-icon">Totholz abgelöst':
         totholz,
 
 
-    "🌳 Naturdenkmäler Fläche":
+
+    "Naturdenkmäler Fläche":
 
         naturdenkmaelerFlaeche,
 
-
-    "📍 Naturdenkmäler Punkt":
-
+    '<img src="icons/denkmaeler.svg" class="layer-icon"> Naturdenkmäler Punkt':
         naturdenkmaelerPunkt,
 
-
-    "🏔️ Naturpark Karwendel":
+    "Naturpark Karwendel":
 
         naturparkGrenze
 

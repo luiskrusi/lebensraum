@@ -19,7 +19,21 @@ const osm = L.tileLayer(
     }
 ).addTo(map);
 
+// ===============================
+// Totholz Einzelmarker Icon
+// ===============================
 
+const totholzIcon = L.icon({
+
+    iconUrl: "icons/totholz.svg",
+
+    iconSize: [35, 35],
+
+    iconAnchor: [17, 35],
+
+    popupAnchor: [0, -35]
+
+});
 
 // ===============================
 // Locate Me Plugin
@@ -132,19 +146,19 @@ const totholz = L.markerClusterGroup({
     disableClusteringAtZoom: 15,
 
 
-    iconCreateFunction: function(cluster) {
+    iconCreateFunction: function (cluster) {
 
         return L.divIcon({
 
             html:
-            '<div class="cluster-totholz">' +
-            cluster.getChildCount() +
-            '</div>',
+                '<div class="cluster-totholz">' +
+                cluster.getChildCount() +
+                '</div>',
 
 
             className: 'custom-cluster',
 
-            iconSize: L.point(40,40)
+            iconSize: L.point(40, 40)
 
         });
 
@@ -163,19 +177,19 @@ const naturdenkmaelerPunkt = L.markerClusterGroup({
     disableClusteringAtZoom: 15,
 
 
-    iconCreateFunction: function(cluster) {
+    iconCreateFunction: function (cluster) {
 
         return L.divIcon({
 
             html:
-            '<div class="cluster-naturdenkmal">' +
-            cluster.getChildCount() +
-            '</div>',
+                '<div class="cluster-naturdenkmal">' +
+                cluster.getChildCount() +
+                '</div>',
 
 
             className: 'custom-cluster',
 
-            iconSize: L.point(40,40)
+            iconSize: L.point(40, 40)
 
         });
 
@@ -194,7 +208,7 @@ const naturparkGrenze = L.layerGroup();
 // GeoJSON Loader
 // ===============================
 
-function loadGeoJSON(url, group, style = {}) {
+function loadGeoJSON(url, group, style = {}, markerIcon = null) {
 
 
     fetch(url)
@@ -240,22 +254,26 @@ function loadGeoJSON(url, group, style = {}) {
                 pointToLayer: function (feature, latlng) {
 
 
+                    if (markerIcon) {
+
+                        return L.marker(
+                            latlng,
+                            {
+                                icon: markerIcon
+                            }
+                        );
+
+                    }
+
+
                     return L.circleMarker(
-
                         latlng,
-
                         {
-
                             radius: 6,
-
                             color: style.color || "brown",
-
                             fillColor: style.fillColor || "brown",
-
                             fillOpacity: 0.8
-
                         }
-
                     );
 
 
@@ -500,19 +518,15 @@ loadGeoJSON(
     totholz,
 
     {
+        color:"brown",
+        weight:2,
+        fillColor:"orange",
+        fillOpacity:0.5
+    },
 
-        color: "brown",
-
-        weight: 2,
-
-        fillColor: "orange",
-
-        fillOpacity: 0.5
-
-    }
+    totholzIcon
 
 );
-
 // ===============================
 // Naturpark Karwendel Grenze laden
 // ===============================

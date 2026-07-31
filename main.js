@@ -121,11 +121,69 @@ new L.Control.Measure({
 // Layer Gruppen
 // ===============================
 
-const totholz = L.layerGroup();
+const totholz = L.markerClusterGroup({
+
+    showCoverageOnHover: false,
+
+    spiderfyOnMaxZoom: true,
+
+    zoomToBoundsOnClick: true,
+
+    disableClusteringAtZoom: 15,
+
+
+    iconCreateFunction: function(cluster) {
+
+        return L.divIcon({
+
+            html:
+            '<div class="cluster-totholz">' +
+            cluster.getChildCount() +
+            '</div>',
+
+
+            className: 'custom-cluster',
+
+            iconSize: L.point(40,40)
+
+        });
+
+    }
+
+});
+
+const naturdenkmaelerPunkt = L.markerClusterGroup({
+
+    showCoverageOnHover: false,
+
+    spiderfyOnMaxZoom: true,
+
+    zoomToBoundsOnClick: true,
+
+    disableClusteringAtZoom: 15,
+
+
+    iconCreateFunction: function(cluster) {
+
+        return L.divIcon({
+
+            html:
+            '<div class="cluster-naturdenkmal">' +
+            cluster.getChildCount() +
+            '</div>',
+
+
+            className: 'custom-cluster',
+
+            iconSize: L.point(40,40)
+
+        });
+
+    }
+
+});
 
 const naturdenkmaelerFlaeche = L.layerGroup();
-
-const naturdenkmaelerPunkt = L.layerGroup();
 
 const naturparkGrenze = L.layerGroup();
 
@@ -165,7 +223,18 @@ function loadGeoJSON(url, group, style = {}) {
             const layer = L.geoJSON(data, {
 
 
-                style: style,
+                style: function (feature) {
+
+                    if (
+                        feature.geometry.type === "Point" ||
+                        feature.geometry.type === "MultiPoint"
+                    ) {
+                        return {};
+                    }
+
+                    return style;
+
+                },
 
 
                 pointToLayer: function (feature, latlng) {
@@ -317,7 +386,18 @@ function loadWFS(url, typeName, group, style = {}) {
             const layer = L.geoJSON(data, {
 
 
-                style: style,
+                style: function (feature) {
+
+                    if (
+                        feature.geometry.type === "Point" ||
+                        feature.geometry.type === "MultiPoint"
+                    ) {
+                        return {};
+                    }
+
+                    return style;
+
+                },
 
 
                 pointToLayer: function (feature, latlng) {
@@ -520,7 +600,7 @@ loadWFS(
 const overlayMaps = {
 
 
-    "🌲 2025 Totholz abgelöst":
+    "🌲 Totholz abgelöst":
 
         totholz,
 

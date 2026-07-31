@@ -686,21 +686,14 @@ const overlayMaps = {
 L.control.layers(
 
     {
-
-        "OpenStreetMap": osm
-
+        "OpenStreetMap":osm
     },
-
 
     overlayMaps,
 
-
     {
-
-        collapsed: false
-
+        collapsed:true
     }
-
 
 ).addTo(map);
 

@@ -273,3 +273,90 @@ footer{
     margin-right:5px;
 
 }
+
+/* ===============================
+   Karte Desktop
+================================ */
+
+#map {
+
+    width:100%;
+
+    height: calc(100vh - 180px);
+
+}
+
+
+
+/* ===============================
+   Mobile Ansicht
+================================ */
+
+@media (max-width: 768px) {
+
+
+    header {
+
+        padding:10px;
+
+    }
+
+
+    h1 {
+
+        font-size:18px;
+
+    }
+
+
+    header p {
+
+        font-size:13px;
+
+    }
+
+
+    .info {
+
+        display:none;
+
+    }
+
+
+    #map {
+
+        height: calc(100vh - 120px);
+
+    }
+
+
+    footer {
+
+        display:none;
+
+    }
+
+
+    /* Layer Control kleiner */
+
+    .leaflet-control-layers {
+
+        max-width:220px;
+
+        font-size:13px;
+
+    }
+
+
+    /* Locate / Measure Buttons */
+
+    .leaflet-control {
+
+        transform:scale(0.9);
+
+        transform-origin:top left;
+
+    }
+
+
+}

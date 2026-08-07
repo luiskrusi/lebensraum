@@ -162,7 +162,7 @@ new L.Control.Measure({
 
     secondaryAreaUnit: "sqmeters"
 
-}).addTo(map);
+});
 
 
 

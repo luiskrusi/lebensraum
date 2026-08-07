@@ -35,6 +35,18 @@ const totholzIcon = L.icon({
 
 });
 
+const totholzPotentialIcon = L.icon({
+
+    iconUrl: "icons/totholz_pot.svg",
+
+    iconSize: [35, 35],
+
+    iconAnchor: [17, 35],
+
+    popupAnchor: [0, -35]
+
+});
+
 
 // ===============================
 // Naturdenkmal Einzelmarker Icon
@@ -175,6 +187,43 @@ const totholz = L.markerClusterGroup({
             </div>
             `,
 
+
+            className: "custom-cluster-icon",
+
+            iconSize: [30, 30]
+
+        });
+
+    }
+
+});
+
+const totholzPotential = L.markerClusterGroup({
+
+    showCoverageOnHover: false,
+
+    spiderfyOnMaxZoom: true,
+
+    zoomToBoundsOnClick: true,
+
+    disableClusteringAtZoom: 15,
+
+    iconCreateFunction: function (cluster) {
+
+        return L.divIcon({
+
+            html:
+                `
+                <div class="totholz-potential-cluster">
+
+                    <img src="icons/totholz_pot.svg">
+
+                    <span>
+                        ${cluster.getChildCount()}
+                    </span>
+
+                </div>
+                `,
 
             className: "custom-cluster-icon",
 
@@ -573,6 +622,28 @@ loadGeoJSON(
     totholzIcon
 
 );
+
+// ===============================
+// Totholz Potential laden
+// ===============================
+
+loadGeoJSON(
+
+    "data/Totholz_Potential.geojson",
+
+    totholzPotential,
+
+    {
+        color: "darkred",
+        weight: 2,
+        fillColor: "red",
+        fillOpacity: 0.5
+    },
+
+    totholzPotentialIcon
+
+);
+
 // ===============================
 // Naturpark Karwendel Grenze laden
 // ===============================
@@ -665,7 +736,8 @@ const overlayMaps = {
     '<img src="icons/totholz.svg" class="layer-icon">Totholz abgelöst':
         totholz,
 
-
+    '<img src="icons/totholz_pot.svg" class="layer-icon">Totholz Potential':
+    totholzPotential,
 
     "Naturdenkmäler Fläche":
 
@@ -686,13 +758,13 @@ const overlayMaps = {
 L.control.layers(
 
     {
-        "OpenStreetMap":osm
+        "OpenStreetMap": osm
     },
 
     overlayMaps,
 
     {
-        collapsed:true
+        collapsed: true
     }
 
 ).addTo(map);
@@ -724,6 +796,8 @@ L.control.scale({
 // ===============================
 
 totholz.addTo(map);
+
+totholzPotential.addTo(map);
 
 naturdenkmaelerFlaeche.addTo(map);
 

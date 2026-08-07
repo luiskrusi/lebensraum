@@ -68,7 +68,25 @@ href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.c
     <link rel="stylesheet"
           href="main.css">
 
+<script>
 
+function toggleInfo(){
+
+    const box = document.getElementById("projectInfo");
+
+    if(box.style.display === "block"){
+
+        box.style.display = "none";
+
+    }else{
+
+        box.style.display = "block";
+
+    }
+
+}
+
+</script>
 </head>
 
 
@@ -92,9 +110,7 @@ href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.c
                     im Naturpark Karwendel
                 </h1>
 
-                <p>
-                    Entwurf einer interaktiven Webkarte
-                </p>
+          
 
             </div>
 
@@ -103,25 +119,30 @@ href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.c
 
         <div class="info">
 
-            <span>
-                <i class="fa-solid fa-layer-group"></i>
-                GeoJSON-Layer
-            </span>
+    <button class="info-button" onclick="toggleInfo()">
+        <i class="fa-solid fa-circle-info"></i>
+        Info
+    </button>
 
 
-            <span>
-                <i class="fa-solid fa-location-dot"></i>
-                Leaflet WebGIS
-            </span>
+    <div class="info-box" id="projectInfo">
 
+        <h3>
+            Naturpark Karwendel
+        </h3>
 
-            <span>
-                <i class="fa-solid fa-ruler"></i>
-                Messen
-            </span>
+        <p>
+            Diese interaktive Karte visualisiert ausgewählte
+            Maßnahmen, Unterschutzstellungen und besondere
+            Naturobjekte im Naturpark Karwendel.
+            Sie dient der Information über wertvolle
+            Landschaftselemente und deren Bedeutung für
+            den Natur- und Landschaftsschutz. Bei Interesse an einer Lebensbaum-Patenschaft folgen Sie bitte den Schritten und füllen das Formular aus. 
+        </p>
 
+    </div>
 
-        </div>
+</div>
 
 
     </header>

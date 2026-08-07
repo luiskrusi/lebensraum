@@ -20,6 +20,14 @@ const osm = L.tileLayer(
 ).addTo(map);
 
 // ===============================
+// BasemapAT Orthofoto
+// ===============================
+
+const orthofoto = L.tileLayer.provider(
+    'BasemapAT.orthofoto'
+);
+
+// ===============================
 // Totholz Einzelmarker Icon
 // ===============================
 
@@ -754,11 +762,11 @@ const overlayMaps = {
 };
 
 
-
 L.control.layers(
 
     {
-        "OpenStreetMap": osm
+        "OpenStreetMap": osm,
+        "BasemapAT Orthofoto": orthofoto
     },
 
     overlayMaps,

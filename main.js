@@ -374,30 +374,30 @@ function loadGeoJSON(url, group, style = {}, markerIcon = null, popup = true) {
                     if (popup && feature.properties) {
 
 
-    layer.bindPopup(
+                        layer.bindPopup(
 
 
-        Object.entries(feature.properties)
+                            Object.entries(feature.properties)
 
 
-            .filter(([k, v]) =>
-                v !== null &&
-                v !== ""
-            )
+                                .filter(([k, v]) =>
+                                    v !== null &&
+                                    v !== ""
+                                )
 
 
-            .map(([k, v]) =>
-                `<b>${k}</b>: ${v}`
-            )
+                                .map(([k, v]) =>
+                                    `<b>${k}</b>: ${v}`
+                                )
 
 
-            .join("<br>")
+                                .join("<br>")
 
 
-    );
+                        );
 
 
-}
+                    }
 
 
                 }
@@ -544,30 +544,15 @@ function loadWFS(url, typeName, group, style = {}, markerIcon = null) {
 
                 onEachFeature: function (feature, layer) {
 
-
-                    if (feature.properties) {
-
+                    if (feature.properties && feature.properties.NAME) {
 
                         layer.bindPopup(
-
-
-                            Object.entries(feature.properties)
-
-
-                                .map(([k, v]) =>
-
-                                    `<b>${k}</b>: ${v}`
-
-                                )
-
-
-                                .join("<br>")
-
-
+                            `<b>${feature.properties.NAME}</b>`
                         );
 
-
                     }
+
+
 
 
                 }
@@ -609,21 +594,22 @@ function loadWFS(url, typeName, group, style = {}, markerIcon = null) {
 // ===============================
 // Totholz laden
 // ===============================
-
 loadGeoJSON(
 
-    "data/2025_Totholz_abgeloest.geojson",
+"data/2025_Totholz_abgeloest.geojson",
 
-    totholz,
+totholz,
 
-    {
-        color: "brown",
-        weight: 2,
-        fillColor: "orange",
-        fillOpacity: 0.5
-    },
+{
+    color: "brown",
+    weight: 2,
+    fillColor: "orange",
+    fillOpacity: 0.5
+},
 
-    totholzIcon
+totholzIcon,
+
+false
 
 );
 
@@ -654,25 +640,25 @@ loadGeoJSON(
 
 loadGeoJSON(
 
-"data/NP_Grenze1.geojson",
+    "data/NP_Grenze1.geojson",
 
-naturparkGrenze,
+    naturparkGrenze,
 
-{
+    {
 
-    color: "black",
+        color: "black",
 
-    weight: 1,
+        weight: 1,
 
-    fillColor: "transparent",
+        fillColor: "transparent",
 
-    fillOpacity: 0
+        fillOpacity: 0
 
-},
+    },
 
-null,
+    null,
 
-false
+    false
 
 );
 

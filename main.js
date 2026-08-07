@@ -296,7 +296,7 @@ const naturparkGrenze = L.layerGroup();
 // GeoJSON Loader
 // ===============================
 
-function loadGeoJSON(url, group, style = {}, markerIcon = null) {
+function loadGeoJSON(url, group, style = {}, markerIcon = null, popup = true) {
 
 
     fetch(url)
@@ -371,37 +371,33 @@ function loadGeoJSON(url, group, style = {}, markerIcon = null) {
                 onEachFeature: function (feature, layer) {
 
 
-                    if (feature.properties) {
+                    if (popup && feature.properties) {
 
 
-                        layer.bindPopup(
+    layer.bindPopup(
 
 
-                            Object.entries(feature.properties)
+        Object.entries(feature.properties)
 
 
-                                .filter(([k, v]) =>
-
-                                    v !== null &&
-                                    v !== ""
-
-                                )
+            .filter(([k, v]) =>
+                v !== null &&
+                v !== ""
+            )
 
 
-                                .map(([k, v]) =>
-
-                                    `<b>${k}</b>: ${v}`
-
-                                )
+            .map(([k, v]) =>
+                `<b>${k}</b>: ${v}`
+            )
 
 
-                                .join("<br>")
+            .join("<br>")
 
 
-                        );
+    );
 
 
-                    }
+}
 
 
                 }
@@ -658,21 +654,25 @@ loadGeoJSON(
 
 loadGeoJSON(
 
-    "data/NP_Grenze1.geojson",
+"data/NP_Grenze1.geojson",
 
-    naturparkGrenze,
+naturparkGrenze,
 
-    {
+{
 
-        color: "black",
+    color: "black",
 
-        weight: 1,
+    weight: 1,
 
-        fillColor: "transparent",
+    fillColor: "transparent",
 
-        fillOpacity: 0
+    fillOpacity: 0
 
-    }
+},
+
+null,
+
+false
 
 );
 
@@ -740,19 +740,22 @@ loadWFS(
 
 const overlayMaps = {
 
+    '<img src="icons/totholz_pot.svg" class="layer-icon">Totholz Potential':
+        totholzPotential,
+
 
     '<img src="icons/totholz.svg" class="layer-icon">Totholz abgelöst':
         totholz,
 
-    '<img src="icons/totholz_pot.svg" class="layer-icon">Totholz Potential':
-    totholzPotential,
 
-    "Naturdenkmäler Fläche":
+    '<img src="icons/denkmaeler.svg" class="layer-icon"> Naturdenkmäler':
+        naturdenkmaelerPunkt,
+
+    "Naturdenkmäler (Flächen)":
 
         naturdenkmaelerFlaeche,
 
-    '<img src="icons/denkmaeler.svg" class="layer-icon"> Naturdenkmäler Punkt':
-        naturdenkmaelerPunkt,
+
 
     "Naturpark Karwendel":
 
@@ -803,12 +806,12 @@ L.control.scale({
 // Layer automatisch anzeigen
 // ===============================
 
-totholz.addTo(map);
+totholz;
 
 totholzPotential.addTo(map);
 
-naturdenkmaelerFlaeche.addTo(map);
+naturdenkmaelerFlaeche;
 
-naturdenkmaelerPunkt.addTo(map);
+naturdenkmaelerPunkt;
 
 naturparkGrenze.addTo(map);

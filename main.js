@@ -99,7 +99,7 @@ L.control.locate({
     keepCurrentZoomLevel: false
 
 
-}).addTo(map);
+});
 
 
 

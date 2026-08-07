@@ -740,11 +740,11 @@ loadWFS(
 
 const overlayMaps = {
 
-    '<img src="icons/totholz_pot.svg" class="layer-icon">Totholz Potential':
+    '<img src="icons/totholz_pot.svg" class="layer-icon">Lebendsbäume (ohne Paten*in)':
         totholzPotential,
 
 
-    '<img src="icons/totholz.svg" class="layer-icon">Totholz abgelöst':
+    '<img src="icons/totholz.svg" class="layer-icon">Lebensbäume abgelöst':
         totholz,
 
 

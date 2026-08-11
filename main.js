@@ -792,12 +792,12 @@ L.control.scale({
 // Layer automatisch anzeigen
 // ===============================
 
-totholz;
+totholz.addTo(map);
 
 totholzPotential.addTo(map);
 
-naturdenkmaelerFlaeche;
+naturdenkmaelerFlaeche.addTo(map);
 
-naturdenkmaelerPunkt;
+naturdenkmaelerPunkt.addTo(map);
 
 naturparkGrenze.addTo(map);

@@ -64,7 +64,7 @@ const naturdenkmalIcon = L.icon({
 
     iconUrl: "icons/denkmaeler.svg",
 
-    iconSize: [35, 35],
+    iconSize: [50, 50],
 
     iconAnchor: [17, 35],
 
@@ -276,7 +276,7 @@ const naturdenkmaelerPunkt = L.markerClusterGroup({
 
             className: "custom-cluster-icon",
 
-            iconSize: [50, 50]
+            iconSize: [42, 42]
 
         });
 

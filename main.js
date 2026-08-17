@@ -4,7 +4,10 @@
 // ===============================
 //
 
-const map = L.map('map').setView([47.4, 11.7], 10);
+const map = L.map('map',
+{minZoom: 10,
+    maxZoom: 16
+}).setView([47.4, 11.7], 10);
 
 
 

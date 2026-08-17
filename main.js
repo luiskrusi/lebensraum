@@ -596,20 +596,20 @@ function loadWFS(url, typeName, group, style = {}, markerIcon = null) {
 // ===============================
 loadGeoJSON(
 
-"data/2025_Totholz_abgeloest.geojson",
+    "data/2025_Totholz_abgeloest.geojson",
 
-totholz,
+    totholz,
 
-{
-    color: "brown",
-    weight: 2,
-    fillColor: "orange",
-    fillOpacity: 0.5
-},
+    {
+        color: "brown",
+        weight: 2,
+        fillColor: "orange",
+        fillOpacity: 0.5
+    },
 
-totholzIcon,
+    totholzIcon,
 
-false
+    false
 
 );
 
@@ -652,7 +652,8 @@ loadGeoJSON(
 
         fillColor: "transparent",
 
-        fillOpacity: 0
+        fillColor: "#000000",
+        fillOpacity: 0.15
 
     },
 
@@ -662,7 +663,26 @@ loadGeoJSON(
 
 );
 
+// ===============================
+// Trittsteinbiotope laden
+// ===============================
 
+const trittsteinbiotope = L.layerGroup();
+
+loadGeoJSON(
+
+    "data/trittsteinbiotope.geojson",
+
+    trittsteinbiotope,
+
+    {
+        color: "#0400ff",
+        weight: 2,
+        fillColor: "#77bdff",
+        fillOpacity: 0.45
+    }
+
+);
 
 
 
@@ -720,6 +740,7 @@ loadWFS(
 
 
 
+
 // ===============================
 // Layer Control
 // ===============================
@@ -745,8 +766,10 @@ const overlayMaps = {
 
     "Naturpark Karwendel":
 
-        naturparkGrenze
+        naturparkGrenze,
 
+    "Trittsteinbiotope":
+        trittsteinbiotope,
 
 };
 
@@ -801,3 +824,4 @@ naturdenkmaelerFlaeche.addTo(map);
 naturdenkmaelerPunkt.addTo(map);
 
 naturparkGrenze.addTo(map);
+trittsteinbiotope.addTo(map);

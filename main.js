@@ -653,7 +653,7 @@ loadGeoJSON(
         fillColor: "transparent",
 
         fillColor: "#000000",
-        fillOpacity: 0.15
+        fillOpacity: 0.10
 
     },
 
@@ -763,13 +763,13 @@ const overlayMaps = {
         naturdenkmaelerFlaeche,
 
 
+    "Trittsteinbiotope":
+        trittsteinbiotope,
 
     "Naturpark Karwendel":
 
         naturparkGrenze,
 
-    "Trittsteinbiotope":
-        trittsteinbiotope,
 
 };
 
